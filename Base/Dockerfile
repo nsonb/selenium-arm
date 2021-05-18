@@ -1,12 +1,12 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL authors="Selenium <selenium-developers@googlegroups.com>"
 
 #================================================
 # Customize sources for apt-get
 #================================================
-RUN  echo "deb http://archive.ubuntu.com/ubuntu xenial main universe\n" > /etc/apt/sources.list \
-  && echo "deb http://archive.ubuntu.com/ubuntu xenial-updates main universe\n" >> /etc/apt/sources.list \
-  && echo "deb http://security.ubuntu.com/ubuntu xenial-security main universe\n" >> /etc/apt/sources.list
+# RUN  echo "deb http://archive.ubuntu.com/ubuntu bionic main restricted\n" > /etc/apt/sources.list \
+#   && echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main restricted\n" >> /etc/apt/sources.list \
+#   && echo "deb http://security.ubuntu.com/ubuntu bionic-security main restricted\n" >> /etc/apt/sources.list
 
 # No interactive frontend during docker build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -26,7 +26,7 @@ RUN apt-get -qqy update \
     unzip \
     wget \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-  && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
+  && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./etc/java-8-openjdk/security/java.security
 
 #===================
 # Timezone settings

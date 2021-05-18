@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# IMPORTANT: Change this file only in directory NodeDebug!
 
 source /opt/bin/functions.sh
 /opt/bin/generate_config > /opt/selenium/config.json
@@ -40,13 +38,6 @@ if [ ! -z "$REMOTE_HOST" ]; then
   REMOTE_HOST_PARAM="-remoteHost $REMOTE_HOST"
 fi
 
-if [ ! -z $VNC_NO_PASSWORD ]; then
-    echo "starting VNC server without password authentication"
-    X11VNC_OPTS=
-else
-    X11VNC_OPTS=-usepw
-fi
-
 if [ ! -z "$SE_OPTS" ]; then
   echo "appending selenium options: ${SE_OPTS}"
 fi
@@ -55,8 +46,7 @@ SERVERNUM=$(get_server_num)
 
 rm -f /tmp/.X*lock
 
-DISPLAY=$DISPLAY \
-  xvfb-run -n $SERVERNUM --server-args="-screen 0 $GEOMETRY -ac +extension RANDR" \
+xvfb-run -n $SERVERNUM --server-args="-screen 0 $GEOMETRY -ac +extension RANDR" \
   java ${JAVA_OPTS} -jar /opt/selenium/selenium-server-standalone.jar \
     -role node \
     -hub http://$HUB_PORT_4444_TCP_ADDR:$HUB_PORT_4444_TCP_PORT/grid/register \
@@ -66,18 +56,4 @@ DISPLAY=$DISPLAY \
 NODE_PID=$!
 
 trap shutdown SIGTERM SIGINT
-for i in $(seq 1 10)
-do
-  xdpyinfo -display $DISPLAY >/dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    break
-  fi
-  echo Waiting xvfb...
-  sleep 0.5
-done
-
-fluxbox -display $DISPLAY &
-
-x11vnc $X11VNC_OPTS -forever -shared -rfbport 5900 -display $DISPLAY &
-
 wait $NODE_PID

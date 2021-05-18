@@ -2,11 +2,20 @@
 # NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
 # PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FROM selenium/node-base:3.12.0-cobalt
+FROM seleniumhf/nodebase
 LABEL authors=SeleniumHQ
 
 USER root
 
+#============================================
+# requirements
+#============================================
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    gnupg \
+    gnupg1 \
+    gnupg2 \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 #============================================
 # Google Chrome
 #============================================
@@ -17,14 +26,9 @@ USER root
 #       latest (equivalent to google-chrome-stable)
 #       google-chrome-beta  (pull latest beta)
 #============================================
-ARG CHROME_VERSION="google-chrome-stable"
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-  && apt-get update -qqy \
-  && apt-get -qqy install \
-    ${CHROME_VERSION:-google-chrome-stable} \
-  && rm /etc/apt/sources.list.d/google-chrome.list \
-  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+RUN apt-get update -qqy \
+  && apt-get -qqy install chromium-browser \
+  && rm -rf /var/cache/apt/*
 
 #=================================
 # Chrome Launch Script Wrapper
