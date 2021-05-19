@@ -10,9 +10,9 @@ USER root
 #==============
 # Xvfb
 #==============
-RUN sudo apt-get update -y \
-  && sudo apt-get -y install\ 
-    xvfb\
+RUN apt-get update -qqy \
+  && apt-get -qqy install \
+    xvfb \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 #==============================

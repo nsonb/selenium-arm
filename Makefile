@@ -27,28 +27,28 @@ build: all
 ci: build test
 
 base:
-	cd ./Base && docker build $(BUILD_ARGS) -t $(NAME)/base:$(VERSION) .
+	cd ./Base && docker build $(BUILD_ARGS) -t $(NAME)/base:$(VERSION) --platform linux/arm64 .
 
 generate_hub:
-	cd ./Hub && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./Hub && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 hub: base generate_hub
-	cd ./Hub && docker build $(BUILD_ARGS) -t $(NAME)/hub:$(VERSION) .
+	cd ./Hub && docker build $(BUILD_ARGS) -t $(NAME)/hub:$(VERSION) --platform linux/arm64 .
 
 generate_nodebase:
-	cd ./NodeBase && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./NodeBase && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 nodebase: base generate_nodebase
-	cd ./NodeBase && docker build $(BUILD_ARGS) -t $(NAME)/node-base:$(VERSION) .
+	cd ./NodeBase && docker build $(BUILD_ARGS) -t $(NAME)/node-base:$(VERSION) --platform linux/arm64 .
 
 generate_chrome:
-	cd ./NodeChrome && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./NodeChrome && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 chrome: nodebase generate_chrome
-	cd ./NodeChrome && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome:$(VERSION) .
+	cd ./NodeChrome && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome:$(VERSION) --platform linux/arm64 .
 
 generate_firefox:
-	cd ./NodeFirefox && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./NodeFirefox && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 firefox: nodebase generate_firefox
 	cd ./NodeFirefox && docker build $(BUILD_ARGS) -t $(NAME)/node-firefox:$(VERSION) .
@@ -66,22 +66,22 @@ standalone_firefox_debug: firefox_debug generate_standalone_firefox_debug
 	cd ./StandaloneFirefoxDebug && docker build $(BUILD_ARGS) -t $(NAME)/standalone-firefox-debug:$(VERSION) .
 
 generate_standalone_chrome:
-	cd ./Standalone && ./generate.sh StandaloneChrome node-chrome Chrome $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./Standalone && ./generate.sh StandaloneChrome node-chrome Chrome $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 standalone_chrome: chrome generate_standalone_chrome
-	cd ./StandaloneChrome && docker build $(BUILD_ARGS) -t $(NAME)/standalone-chrome:$(VERSION) .
+	cd ./StandaloneChrome && docker build $(BUILD_ARGS) -t $(NAME)/standalone-chrome:$(VERSION) --platform linux/arm64 .
 
 generate_standalone_chrome_debug:
-	cd ./StandaloneDebug && ./generate.sh StandaloneChromeDebug node-chrome-debug Chrome $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./StandaloneDebug && ./generate.sh StandaloneChromeDebug node-chrome-debug Chrome $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 standalone_chrome_debug: chrome_debug generate_standalone_chrome_debug
-	cd ./StandaloneChromeDebug && docker build $(BUILD_ARGS) -t $(NAME)/standalone-chrome-debug:$(VERSION) .
+	cd ./StandaloneChromeDebug && docker build $(BUILD_ARGS) -t $(NAME)/standalone-chrome-debug:$(VERSION) --platform linux/arm64 .
 
 generate_chrome_debug:
-	cd ./NodeDebug && ./generate.sh NodeChromeDebug node-chrome Chrome $(VERSION) $(NAMESPACE) $(AUTHORS)
+	cd ./NodeDebug && ./generate.sh NodeChromeDebug node-chrome Chrome $(VERSION) $(NAMESPACE) $(AUTHORS) --platform linux/arm64
 
 chrome_debug: generate_chrome_debug chrome
-	cd ./NodeChromeDebug && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome-debug:$(VERSION) .
+	cd ./NodeChromeDebug && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome-debug:$(VERSION) --platform linux/arm64 .
 
 generate_firefox_debug:
 	cd ./NodeDebug && ./generate.sh NodeFirefoxDebug node-firefox Firefox $(VERSION) $(NAMESPACE) $(AUTHORS)

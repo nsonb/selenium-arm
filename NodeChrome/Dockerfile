@@ -8,15 +8,6 @@ LABEL authors=SeleniumHQ
 USER root
 
 #============================================
-# requirements
-#============================================
-RUN apt-get update -qqy \
-  && apt-get -qqy install \
-    gnupg \
-    gnupg1 \
-    gnupg2 \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-#============================================
 # Google Chrome
 #============================================
 # can specify versions by CHROME_VERSION;
